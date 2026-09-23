@@ -3,7 +3,7 @@ const fs = require("fs");
 function readDataset(filename) {
     const data = fs.readFileSync(filename, "utf8").trim();
 
-    const lines = data.split(/\r?\n/);
+    const lines = data.split(/\r?\n/); // Datei in einzelne Zeilen aufteilen
     const headers = lines[0].split(",");
 
     const records = lines.slice(1).map(line => {
