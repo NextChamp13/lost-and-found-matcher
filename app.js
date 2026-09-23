@@ -46,7 +46,7 @@ const records = readDataset("lost_and_found_dataset.csv");
 
 // Datensätze anzeigen
 records.forEach((record, index) => {
-    console.log(--- Record ${index + 1} ---);
+    console.log('--- Record ${index + 1} ---');
     console.log(record);
 });
 
