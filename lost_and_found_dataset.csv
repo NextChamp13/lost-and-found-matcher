@@ -1,0 +1,11 @@
+id,type,category,color,photo,location,date,description,status
+1,LOST,Elektronik,Schwarz,airpods_lost.jpg,FH Technikum Wien,2026-09-18T13:00,"Schwarze AirPods Pro in einem schwarzen Ladecase",OFFEN
+2,FOUND,Elektronik,Schwarz,airpods_found.jpg,FH Technikum Wien,2026-09-19T10:30,"Schwarze AirPods Pro mit Ladecase",GEFUNDEN
+3,LOST,Schlüssel,Silber,keys_lost.jpg,FH Technikum Wien,2026-09-17T16:15,"Schlüsselbund mit drei Schlüsseln und rotem Anhänger",OFFEN
+4,FOUND,Schlüssel,Silber,keys_found.jpg,FH Technikum Wien,2026-09-18T09:20,"Schlüsselbund mit drei Schlüsseln und rotem Anhänger",GEFUNDEN
+5,LOST,Trinkflasche,Blau,bottle_lost.jpg,FH Technikum Wien,2026-09-20T11:00,"Blaue Edelstahl-Trinkflasche mit schwarzem Deckel",OFFEN
+6,FOUND,Trinkflasche,Blau,bottle_found.jpg,FH Technikum Wien,2026-09-20T14:45,"Blaue Metall-Trinkflasche mit schwarzem Deckel",GEFUNDEN
+7,LOST,Rucksack,Schwarz,backpack_lost.jpg,FH Technikum Wien,2026-09-16T08:30,"Schwarzer Eastpak-Rucksack mit Laptopfach",OFFEN
+8,FOUND,Rucksack,Schwarz,backpack_found.jpg,FH Technikum Wien,2026-09-16T12:10,"Schwarzer Rucksack mit Laptopfach und kleinem Anhänger",GEFUNDEN
+9,LOST,Bekleidung,Grau,hoodie_lost.jpg,FH Technikum Wien,2026-09-21T18:00,"Grauer Kapuzenpullover mit kleinem weißen Logo",OFFEN
+10,FOUND,Bekleidung,Grau,hoodie_found.jpg,FH Technikum Wien,2026-09-22T09:00,"Grauer Hoodie mit kleinem weißen Logo",GEFUNDEN
