@@ -30,10 +30,12 @@ function readDataset(filename) {
         const record = {};
 
         headers.forEach((header, index) => {
-            record[header] = values[index];
-        });
+        record[header] = values[index];
+    });
 
-        return record;
+    record.id = Number(record.id);
+
+    return record;
     });
 
     return records;
@@ -43,10 +45,13 @@ function readDataset(filename) {
 // Dataset einlesen
 const records = readDataset("lost_and_found_dataset.csv");
 
+const lostItems = records.filter(record => record.type === "LOST");
+const foundItems = records.filter(record => record.type === "FOUND");
+
 
 // Datensätze anzeigen
 records.forEach((record, index) => {
-    console.log('--- Record ${index + 1} ---');
+    console.log(`--- Record ${index + 1} ---`);
     console.log(record);
 });
 
