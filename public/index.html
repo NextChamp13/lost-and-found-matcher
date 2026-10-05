@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lost & Found Matcher</title>
+
+    <!-- Schriftart -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Eigenes CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="app-header">
+        <div class="header-container">
+
+            <div class="brand" onclick="navigateTo('view-dashboard')">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-magnifying-glass-location"></i>
+                </div>
+
+                <div class="brand-text">
+                    <span class="brand-title">Lost & Found Matcher</span>
+                    <span class="brand-subtitle">FH Technikum Wien</span>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <button
+                    class="nav-link active"
+                    data-target="view-dashboard"
+                    onclick="navigateTo('view-dashboard')">
+                    <i class="fa-solid fa-house"></i>
+                    Übersicht
+                </button>
+
+                <button
+                    class="nav-link"
+                    data-target="view-my-reports"
+                    onclick="navigateTo('view-my-reports')">
+                    <i class="fa-solid fa-folder-open"></i>
+                    Meine Meldungen
+                </button>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <main class="main-wrapper">
+
+        <!-- =====================================================
+             1. DASHBOARD
+        ====================================================== -->
+
+        <section id="view-dashboard" class="app-view active">
+
+            <div class="hero-section">
+                <span class="badge-pill">
+                    <span class="indicator-dot"></span>
+                    Automatischer Lost & Found Abgleich
+                </span>
+
+                <h1 class="hero-title">
+                    Verloren?
+                    <span class="highlight-blue">Wir helfen</span>
+                    beim Wiederfinden.
+                </h1>
+
+                <p class="hero-desc">
+                    Melde verlorene oder gefundene Gegenstände
+                    und finde automatisch mögliche Übereinstimmungen.
+                </p>
+            </div>
+
+
+            <!-- Verloren / Gefunden -->
+
+            <div class="action-grid">
+
+                <div class="card card-action card-lost">
+                    <div class="action-header">
+                        <div class="action-icon icon-blue">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+
+                        <span class="sub-badge">Verlustmeldung</span>
+                    </div>
+
+                    <h2 class="card-title">Etwas verloren?</h2>
+
+                    <p class="card-desc">
+                        Erstelle eine Meldung und lasse automatisch
+                        nach möglichen Übereinstimmungen suchen.
+                    </p>
+
+                    <ul class="feature-checklist">
+                        <li>
+                            <i class="fa-solid fa-check check-blue"></i>
+                            In maximal 5 Schritten erfassen
+                        </li>
+
+                        <li>
+                            <i class="fa-solid fa-percent check-blue"></i>
+                            Matches mit Prozentwert anzeigen
+                        </li>
+                    </ul>
+
+                    <button
+                        class="btn btn-primary btn-block"
+                        onclick="navigateTo('view-report-lost')">
+                        <i class="fa-solid fa-plus"></i>
+                        Verlorenen Gegenstand melden
+                    </button>
+                </div>
+
+
+                <div class="card card-action card-found">
+                    <div class="action-header">
+                        <div class="action-icon icon-teal">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+
+                        <span class="sub-badge sub-badge-teal">
+                            Fundmeldung
+                        </span>
+                    </div>
+
+                    <h2 class="card-title">Etwas gefunden?</h2>
+
+                    <p class="card-desc">
+                        Melde einen gefundenen Gegenstand,
+                        damit er mit bestehenden Verlustmeldungen
+                        verglichen werden kann.
+                    </p>
+
+                    <ul class="feature-checklist">
+                        <li>
+                            <i class="fa-solid fa-check check-teal"></i>
+                            Schnell und übersichtlich erfassen
+                        </li>
+
+                        <li>
+                            <i class="fa-solid fa-arrows-rotate check-teal"></i>
+                            Automatisch mit Verlustmeldungen vergleichen
+                        </li>
+                    </ul>
+
+                    <button
+                        class="btn btn-teal btn-block"
+                        onclick="navigateTo('view-report-found')">
+                        <i class="fa-solid fa-plus"></i>
+                        Gefundenen Gegenstand melden
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- Aktuelle Meldungen -->
+
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">Aktuelle Meldungen</h3>
+
+                    <p class="section-subtitle">
+                        Zuletzt gespeicherte verlorene und gefundene Gegenstände
+                    </p>
+                </div>
+
+                <button
+                    class="btn btn-outline-sm"
+                    onclick="navigateTo('view-my-reports')">
+                    <i class="fa-solid fa-folder"></i>
+                    Alle Meldungen
+                </button>
+            </div>
+
+            <!-- Wird durch script.js mit CSV-Daten gefüllt -->
+            <div id="dashboard-items" class="feed-grid"></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             2. VERLORENEN GEGENSTAND MELDEN
+        ====================================================== -->
+
+        <section id="view-report-lost" class="app-view">
+
+            <div class="view-header">
+                <span class="sub-badge">Verlustmeldung</span>
+
+                <h1 class="view-title">
+                    Verlorenen Gegenstand melden
+                </h1>
+
+                <p class="view-desc">
+                    Gib die wichtigsten Informationen
+                    in maximal fünf kurzen Schritten ein.
+                </p>
+            </div>
+
+
+            <!-- Fortschrittsanzeige -->
+
+            <div class="stepper-card">
+
+                <div class="stepper-header">
+                    <span id="lost-step-label" class="stepper-state">
+                        Schritt 1 von 5: Was hast du verloren?
+                    </span>
+                </div>
+
+                <div class="stepper-bar-bg">
+                    <div
+                        id="lost-progress-bar"
+                        class="stepper-bar-fill"
+                        style="width: 20%;">
+                    </div>
+                </div>
+
+                <div id="lost-step-nodes" class="step-nodes">
+                    <div class="step-node active" data-step="1">
+                        <span>1</span>
+                        Was
+                    </div>
+
+                    <div class="step-node" data-step="2">
+                        <span>2</span>
+                        Wo
+                    </div>
+
+                    <div class="step-node" data-step="3">
+                        <span>3</span>
+                        Wann
+                    </div>
+
+                    <div class="step-node" data-step="4">
+                        <span>4</span>
+                        Details
+                    </div>
+
+                    <div class="step-node" data-step="5">
+                        <span>5</span>
+                        Foto
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Verlustformular -->
+
+            <div class="form-container card">
+
+                <form id="form-lost" onsubmit="event.preventDefault();">
+
+                    <!-- Schritt 1: Kategorie und Farbe -->
+
+                    <div id="lost-pane-1" class="step-pane active">
+                        <h3 class="pane-title">
+                            <i class="fa-solid fa-tag"></i>
+                            Was hast du verloren?
+                        </h3>
+
+                        <div class="form-group">
+                            <label for="lost-category">Kategorie *</label>
+
+                            <select
+                                id="lost-category"
+                                class="form-control"
+                                required>
+
+                                <option value="">
+                                    Bitte Kategorie wählen...
+                                </option>
+
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Schlüssel">Schlüssel</option>
+                                <option value="Bekleidung">Bekleidung</option>
+                                <option value="Rucksack">Rucksack / Tasche</option>
+                                <option value="Trinkflasche">Trinkflasche</option>
+                                <option value="Sonstiges">Sonstiges</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Farbe *</label>
+
+                            <div id="lost-color-pills" class="pill-group">
+                                <button type="button" class="pill-choice" data-color="Schwarz">
+                                    Schwarz
+                                </button>
+
+                                <button type="button" class="pill-choice" data-color="Silber">
+                                    Silber
+                                </button>
+
+                                <button type="button" class="pill-choice" data-color="Grau">
+                                    Grau
+                                </button>
+
+                                <button type="button" class="pill-choice" data-color="Blau">
+                                    Blau
+                                </button>
+
+                                <button type="button" class="pill-choice" data-color="Rot">
+                                    Rot
+                                </button>
+
+                                <button type="button" class="pill-choice" data-color="Weiß">
+                                    Weiß
+                                </button>
+
+                                <button type="button" class="pill-choice" data-color="Andere">
+                                    Andere
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Schritt 2: Ort -->
+
+                    <div id="lost-pane-2" class="step-pane">
+                        <h3 class="pane-title">
+                            <i class="fa-solid fa-location-dot"></i>
+                            Wo hast du es verloren?
+                        </h3>
+
+                        <div class="form-group">
+                            <label for="lost-location">Ort *</label>
+
+                            <input
+                                type="text"
+                                id="lost-location"
+                                class="form-control"
+                                placeholder="z. B. FH Technikum Wien"
+                                required>
+                        </div>
+                    </div>
+
+
+                    <!-- Schritt 3: Datum und Uhrzeit -->
+
+                    <div id="lost-pane-3" class="step-pane">
+                        <h3 class="pane-title">
+                            <i class="fa-regular fa-clock"></i>
+                            Wann hast du es verloren?
+                        </h3>
+
+                        <div class="form-row">
+
+                            <div class="form-group col-half">
+                                <label for="lost-date">Datum *</label>
+
+                                <input
+                                    type="date"
+                                    id="lost-date"
+                                    class="form-control"
+                                    required>
+                            </div>
+
+                            <div class="form-group col-half">
+                                <label for="lost-time">Uhrzeit *</label>
+
+                                <input
+                                    type="time"
+                                    id="lost-time"
+                                    class="form-control"
+                                    required>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Schritt 4: Beschreibung -->
+
+                    <div id="lost-pane-4" class="step-pane">
+                        <h3 class="pane-title">
+                            <i class="fa-solid fa-align-left"></i>
+                            Beschreibe den Gegenstand
+                        </h3>
+
+                        <div class="form-group">
+                            <label for="lost-desc">Beschreibung *</label>
+
+                            <textarea
+                                id="lost-desc"
+                                class="form-control"
+                                rows="5"
+                                placeholder="z. B. Marke, besondere Merkmale, Kratzer, Anhänger ..."
+                                required></textarea>
+
+                            <small class="form-help">
+                                Je genauer die Beschreibung,
+                                desto besser kann der Algorithmus vergleichen.
+                            </small>
+                        </div>
+                    </div>
+
+
+                    <!-- Schritt 5: Foto -->
+
+                    <div id="lost-pane-5" class="step-pane">
+                        <h3 class="pane-title">
+                            <i class="fa-solid fa-camera"></i>
+                            Foto hinzufügen
+                        </h3>
+
+                        <div class="upload-dropzone">
+                            <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+
+                            <p class="upload-primary-text">
+                                Foto auswählen
+                            </p>
+
+                            <p class="upload-sub-text">
+                                Optional
+                            </p>
+
+                            <input
+                                type="file"
+                                id="lost-photo"
+                                accept="image/*">
+                        </div>
+                    </div>
+
+
+                    <!-- Navigation im Formular -->
+
+                    <div class="form-nav-bar">
+
+                        <button
+                            type="button"
+                            id="lost-btn-prev"
+                            class="btn btn-outline"
+                            onclick="handleStepPrev('lost')">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            Zurück
+                        </button>
+
+                        <div>
+                            <button
+                                type="button"
+                                class="btn btn-outline"
+                                onclick="navigateTo('view-dashboard')">
+                                Abbrechen
+                            </button>
+
+                            <button
+                                type="button"
+                                id="lost-btn-next"
+                                class="btn btn-primary"
+                                onclick="handleStepNext('lost')">
+                                Weiter
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             3. GEFUNDENEN GEGENSTAND MELDEN
+        ====================================================== -->
+
+        <section id="view-report-found" class="app-view">
+
+            <div class="view-header">
+                <span class="sub-badge sub-badge-teal">
+                    Fundmeldung
+                </span>
+
+                <h1 class="view-title">
+                    Gefundenen Gegenstand melden
+                </h1>
+
+                <p class="view-desc">
+                    Erfasse die wichtigsten Informationen,
+                    damit mögliche Matches gefunden werden können.
+                </p>
+            </div>
+
+
+            <div class="card form-container">
+
+                <form id="form-found" onsubmit="event.preventDefault();">
+
+                    <div class="form-group">
+                        <label for="found-category">Kategorie *</label>
+
+                        <select
+                            id="found-category"
+                            class="form-control"
+                            required>
+
+                            <option value="">
+                                Bitte Kategorie wählen...
+                            </option>
+
+                            <option value="Elektronik">Elektronik</option>
+                            <option value="Schlüssel">Schlüssel</option>
+                            <option value="Bekleidung">Bekleidung</option>
+                            <option value="Rucksack">Rucksack / Tasche</option>
+                            <option value="Trinkflasche">Trinkflasche</option>
+                            <option value="Sonstiges">Sonstiges</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="found-color">Farbe *</label>
+
+                        <input
+                            type="text"
+                            id="found-color"
+                            class="form-control"
+                            placeholder="z. B. Schwarz"
+                            required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="found-location">Fundort *</label>
+
+                        <input
+                            type="text"
+                            id="found-location"
+                            class="form-control"
+                            placeholder="z. B. FH Technikum Wien"
+                            required>
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group col-half">
+                            <label for="found-date">Datum *</label>
+
+                            <input
+                                type="date"
+                                id="found-date"
+                                class="form-control"
+                                required>
+                        </div>
+
+                        <div class="form-group col-half">
+                            <label for="found-time">Uhrzeit *</label>
+
+                            <input
+                                type="time"
+                                id="found-time"
+                                class="form-control"
+                                required>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="found-desc">Beschreibung *</label>
+
+                        <textarea
+                            id="found-desc"
+                            class="form-control"
+                            rows="5"
+                            placeholder="Beschreibe den gefundenen Gegenstand möglichst genau ..."
+                            required></textarea>
+                    </div>
+
+
+                    <div class="form-nav-bar">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline"
+                            onclick="navigateTo('view-dashboard')">
+                            Abbrechen
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn btn-teal"
+                            onclick="submitFoundReport()">
+                            <i class="fa-solid fa-check"></i>
+                            Fund speichern
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             4. MEINE MELDUNGEN
+        ====================================================== -->
+
+        <section id="view-my-reports" class="app-view">
+
+            <div class="section-header">
+                <div>
+                    <h1 class="view-title">Meine Meldungen</h1>
+
+                    <p class="view-desc">
+                        Verwalte verlorene und gefundene Gegenstände.
+                    </p>
+                </div>
+            </div>
+
+
+            <!-- Suche und Filter -->
+
+            <div class="filter-bar card">
+
+                <div class="search-input-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="reports-search"
+                        placeholder="Meldungen durchsuchen..."
+                        oninput="filterReports()">
+                </div>
+
+
+                <div class="filter-pills">
+
+                    <button
+                        class="filter-pill active"
+                        data-filter="all"
+                        onclick="setFilter(this, 'all')">
+                        Alle
+                    </button>
+
+                    <button
+                        class="filter-pill"
+                        data-filter="lost"
+                        onclick="setFilter(this, 'lost')">
+                        Verloren
+                    </button>
+
+                    <button
+                        class="filter-pill"
+                        data-filter="found"
+                        onclick="setFilter(this, 'found')">
+                        Gefunden
+                    </button>
+
+                    <button
+                        class="filter-pill"
+                        data-filter="open"
+                        onclick="setFilter(this, 'open')">
+                        Offen
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Wird durch script.js gefüllt -->
+            <div id="reports-container" class="reports-list"></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             5. MATCH-ERGEBNISSE
+        ====================================================== -->
+
+        <section id="view-matches" class="app-view">
+
+            <div class="match-top-nav">
+                <button
+                    class="btn-text"
+                    onclick="navigateTo('view-my-reports')">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Zurück zu Meine Meldungen
+                </button>
+            </div>
+
+
+            <div class="match-results-header">
+                <div>
+                    <h1 class="view-title">
+                        Beste Übereinstimmungen
+                    </h1>
+
+                    <p class="view-desc">
+                        Die gefundenen Gegenstände werden
+                        nach ihrem Match-Prozentsatz sortiert.
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="match-layout-grid">
+
+                <!-- Match-Ergebnisse aus script.js -->
+                <div
+                    id="match-results"
+                    class="match-col-main">
+                </div>
+
+
+                <!-- Erklärung des Algorithmus -->
+
+                <aside class="match-col-sidebar">
+
+                    <div class="card algo-info-card">
+
+                        <h4 class="algo-title">
+                            <i class="fa-solid fa-calculator"></i>
+                            So funktioniert unser Matching
+                        </h4>
+
+                        <p class="algo-desc">
+                            Der Algorithmus vergibt insgesamt
+                            maximal 100 Punkte.
+                        </p>
+
+
+                        <ul class="algo-weights-list">
+
+                            <li>
+                                <span class="weight-label">Kategorie</span>
+                                <strong>30 Punkte</strong>
+                            </li>
+
+                            <li>
+                                <span class="weight-label">Ort</span>
+                                <strong>25 Punkte</strong>
+                            </li>
+
+                            <li>
+                                <span class="weight-label">Farbe</span>
+                                <strong>20 Punkte</strong>
+                            </li>
+
+                            <li>
+                                <span class="weight-label">Datum</span>
+                                <strong>15 Punkte</strong>
+                            </li>
+
+                            <li>
+                                <span class="weight-label">Beschreibung</span>
+                                <strong>10 Punkte</strong>
+                            </li>
+
+                        </ul>
+
+
+                        <div class="algo-note-callout">
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            <span>
+                                Ein Gegenstand kann nicht gefunden worden sein,
+                                bevor er verloren wurde.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div>Lost & Found Matcher</div>
+            <div>FH Technikum Wien</div>
+        </div>
+    </footer>
+
+
+    <!-- Kleine Benachrichtigungen -->
+    <div id="toast" class="toast">
+        Meldung
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>

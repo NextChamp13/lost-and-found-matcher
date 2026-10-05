@@ -9,3 +9,5 @@ id,type,category,color,photo,location,date,description,status
 8,FOUND,Rucksack,Schwarz,backpack_found.jpg,FH Technikum Wien,2026-09-16T12:10,"Schwarzer Rucksack mit Laptopfach und kleinem Anhänger",GEFUNDEN
 9,LOST,Bekleidung,Grau,hoodie_lost.jpg,FH Technikum Wien,2026-09-21T18:00,"Grauer Kapuzenpullover mit kleinem weißen Logo",OFFEN
 10,FOUND,Bekleidung,Grau,hoodie_found.jpg,FH Technikum Wien,2026-09-22T09:00,"Grauer Hoodie mit kleinem weißen Logo",GEFUNDEN
+11,LOST,Schlüssel,Silber,,Wien,2026-10-06T18:30,Zwei Schlüssel mit herz anhänger,OFFEN
+12,FOUND,Schlüssel,Grau,,Wien,2026-10-06T19:00,Zwei Schlüssel mit herz anhänger,GEFUNDEN
