@@ -11,3 +11,4 @@ id,type,category,color,photo,location,date,description,status
 10,FOUND,Bekleidung,Grau,hoodie_found.jpg,FH Technikum Wien,2026-09-22T09:00,"Grauer Hoodie mit kleinem weißen Logo",GEFUNDEN
 11,LOST,Schlüssel,Silber,,Wien,2026-10-06T18:30,Zwei Schlüssel mit herz anhänger,OFFEN
 12,FOUND,Schlüssel,Grau,,Wien,2026-10-06T19:00,Zwei Schlüssel mit herz anhänger,GEFUNDEN
+13,LOST,Sonstiges,Schwarz,,Mci Stephansplatz,2026-10-07T12:30,Es ist ein Schwarzer Stift mit Eingravierung D.K.,OFFEN
