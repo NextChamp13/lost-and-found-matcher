@@ -8,7 +8,8 @@ const appState = {
     totalLostSteps: 5,
     items: [],
     selectedLostColor: null,
-    activeFilter: "all"
+    activeFilter: "all",
+    currentLostItem: null
 };
 
 
@@ -361,6 +362,12 @@ async function loadMatches(id) {
     showToast("Mögliche Matches werden berechnet...");
 
     try {
+        const lostItem = appState.items.find(
+            item => item.id === id && item.type === "LOST"
+        );
+
+        appState.currentLostItem = lostItem || null;
+
         const response = await fetch(`/api/matches/${id}`);
 
         if (!response.ok) {
@@ -369,7 +376,7 @@ async function loadMatches(id) {
 
         const matches = await response.json();
 
-        renderMatches(matches);
+        renderMatches(appState.currentLostItem, matches);
         navigateTo("view-matches");
     }
     catch (error) {
@@ -408,39 +415,98 @@ function getMatchLevel(score) {
 }
 
 
-function renderMatches(matches) {
+function renderMatches(lostItem, matches) {
     const container = document.getElementById("match-results");
 
     if (!container) return;
 
     container.innerHTML = "";
 
-    if (!Array.isArray(matches) || matches.length === 0) {
+    if (!lostItem) {
         container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <strong>Keine Verlustmeldung ausgewählt</strong>
+                <span>Bitte wähle zuerst eine Verlustmeldung aus.</span>
+            </div>
+        `;
+        return;
+    }
+
+    // Oben: ausgewählte Verlustmeldung anzeigen
+    const selectedCard = document.createElement("article");
+    selectedCard.className = "card selected-reference-card";
+
+    selectedCard.innerHTML = `
+        <div class="selected-reference-top">
+            <span class="status-badge badge-orange">
+                Ausgewählte Verlustmeldung
+            </span>
+
+            <h3 class="selected-reference-title">
+                ${escapeHtml(lostItem.category)}
+            </h3>
+        </div>
+
+        <p class="selected-reference-description">
+            ${escapeHtml(lostItem.description)}
+        </p>
+
+        <div class="selected-reference-grid">
+            <div class="selected-reference-field">
+                <span>Farbe</span>
+                <strong>${escapeHtml(lostItem.color)}</strong>
+            </div>
+
+            <div class="selected-reference-field">
+                <span>Ort</span>
+                <strong>${escapeHtml(lostItem.location)}</strong>
+            </div>
+
+            <div class="selected-reference-field">
+                <span>Verloren am</span>
+                <strong>${formatDate(lostItem.date)}</strong>
+            </div>
+
+            <div class="selected-reference-field">
+                <span>ID</span>
+                <strong>${lostItem.id}</strong>
+            </div>
+        </div>
+    `;
+
+    container.appendChild(selectedCard);
+
+        const matchHeading = document.createElement("div");
+    matchHeading.className = "match-section-heading";
+    matchHeading.innerHTML = `
+        <h3>Alle Matches</h3>
+        <p>Gefundene Gegenstände im Vergleich zur ausgewählten Verlustmeldung</p>
+    `;
+
+    container.appendChild(matchHeading);
+
+    if (!Array.isArray(matches) || matches.length === 0) {
+        container.innerHTML += `
             <div class="empty-state">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <strong>Noch kein Match gefunden</strong>
-                <span>
-                    Zurzeit gibt es keine passenden Fundmeldungen.
-                </span>
+                <span>Zurzeit gibt es keine passenden Fundmeldungen.</span>
             </div>
         `;
         return;
     }
 
     matches.forEach((match, index) => {
-        const item = match.item;
+        const foundItem = match.item;
         const score = Number(match.match) || 0;
         const level = getMatchLevel(score);
 
         const card = document.createElement("article");
-
-        card.className =
-            `card match-card ${index === 0 ? "best-match" : ""}`;
+        card.className = `card match-card ${index === 0 ? "best-match" : ""}`;
 
         card.innerHTML = `
             <div class="match-card-header">
-
                 <div>
                     <span class="status-badge ${level.className}">
                         ${level.text}
@@ -448,14 +514,15 @@ function renderMatches(matches) {
 
                     <h3 class="match-card-title">
                         ${index === 0 ? "Bestes Match" : `Match #${index + 1}`}
-                        · ${escapeHtml(item.category)}
                     </h3>
+                    <p class="match-subtext">
+                        Dieser Fund passt am besten zur ausgewählten Verlustmeldung.
+                    </p>
                 </div>
 
                 <div class="match-score">
                     ${score}<small>%</small>
                 </div>
-
             </div>
 
             <div class="match-progress">
@@ -465,30 +532,82 @@ function renderMatches(matches) {
                 </div>
             </div>
 
-            <p class="match-description">
-                ${escapeHtml(item.description)}
-            </p>
+            <div class="compare-grid">
+                    <div class="compare-box compare-lost">
+                        <span class="compare-label badge-orange">
+                            Verlorener Gegenstand
+                        </span>
 
-            <div class="match-info-grid">
+                        <h4 class="compare-title">
+                            ${escapeHtml(lostItem.category)}
+                        </h4>
 
-                <div class="match-info">
-                    <span>Kategorie</span>
-                    <strong>${escapeHtml(item.category)}</strong>
-                </div>
+                        <p class="compare-description">
+                            ${escapeHtml(lostItem.description)}
+                        </p>
 
-                <div class="match-info">
-                    <span>Farbe</span>
-                    <strong>${escapeHtml(item.color)}</strong>
-                </div>
+                        <div class="compare-field-grid">
+                            <div class="compare-field">
+                                <span>Farbe</span>
+                                <strong>${escapeHtml(lostItem.color)}</strong>
+                            </div>
 
-                <div class="match-info">
-                    <span>Fundort</span>
-                    <strong>${escapeHtml(item.location)}</strong>
-                </div>
+                            <div class="compare-field">
+                                <span>Ort</span>
+                                <strong>${escapeHtml(lostItem.location)}</strong>
+                            </div>
 
-                <div class="match-info">
-                    <span>Gefunden am</span>
-                    <strong>${formatDate(item.date)}</strong>
+                            <div class="compare-field">
+                                <span>Datum</span>
+                                <strong>${formatDate(lostItem.date)}</strong>
+                            </div>
+
+                            <div class="compare-field">
+                                <span>Status</span>
+                                <strong>${escapeHtml(lostItem.status)}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="compare-divider">
+                        <span>VS</span>
+                    </div>
+
+                    <div class="compare-box compare-found">
+                        <span class="compare-label badge-teal">
+                            Gefundener Gegenstand
+                        </span>
+
+                        <h4 class="compare-title">
+                            ${escapeHtml(foundItem.category)}
+                        </h4>
+
+                        <p class="compare-description">
+                            ${escapeHtml(foundItem.description)}
+                        </p>
+
+                        <div class="compare-field-grid">
+                            <div class="compare-field">
+                                <span>Farbe</span>
+                                <strong>${escapeHtml(foundItem.color)}</strong>
+                            </div>
+
+                            <div class="compare-field">
+                                <span>Fundort</span>
+                                <strong>${escapeHtml(foundItem.location)}</strong>
+                            </div>
+
+                            <div class="compare-field">
+                                <span>Gefunden am</span>
+                                <strong>${formatDate(foundItem.date)}</strong>
+                            </div>
+
+                            <div class="compare-field">
+                                <span>Status</span>
+                                <strong>${escapeHtml(foundItem.status)}</strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -497,6 +616,8 @@ function renderMatches(matches) {
         container.appendChild(card);
     });
 }
+
+
 
 
 // ==========================================================
